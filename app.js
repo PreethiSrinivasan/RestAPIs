@@ -6,7 +6,7 @@ var userRoutes = require('./routes/user');
 var serviceRoutes = require('./routes/service');
 
 var app = express();
-mongoose.connect('');
+mongoose.connect(process.env.MONGO_URL);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
