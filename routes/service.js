@@ -3,9 +3,9 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 
 var Service = require('../models/service');
-
+var User = require('../models/user');
 router.get('/', function (req, res, next) {
-    Form.find()
+    Service.find()
         .exec(function (err, result) {
             if (err) {
                 return res.status(500).json({
@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:id', function (req, res, next) {
-    Form.find({"user_id":req.params.id})
+    Service.find({"user_id":req.params.user_id})
         .exec(function (err, result) {
             if (err) {
                 return res.status(500).json({
@@ -37,7 +37,7 @@ router.get('/:id', function (req, res, next) {
 });
 
 router.use('/', function (req, res, next) {
-    jwt.verify(req.query.token, 'secret', function (err, decoded) {
+    jwt.verify(req.body.token, 'secret', function (err, decoded) {
         if (err) {
             return res.status(401).json({
                 title: 'Not Authenticated',
@@ -49,7 +49,7 @@ router.use('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-    var decoded = jwt.decode(req.query.token);
+    var decoded = jwt.decode(req.body.token);
     User.findById(decoded.user._id, function (err, user) {
         if (err) {
             return res.status(500).json({
@@ -63,15 +63,13 @@ router.post('/', function (req, res, next) {
             drone_longitude: req.body.drone_longitude,
             user_id: user._id
         });
-        form.save(function (err, result) {
+        service.save(function (err, result) {
             if (err) {
                 return res.status(500).json({
                     title: 'An error occurred',
                     error: err
                 });
             }
-            user.form_id.push(result);
-            user.save();
             res.status(201).json({
                 message: 'Saved form details',
                 obj: result
@@ -81,7 +79,7 @@ router.post('/', function (req, res, next) {
 });
 
 router.patch('/:id', function (req, res, next) {
-    var decoded = jwt.decode(req.query.token);
+    var decoded = jwt.decode(req.body.token);
     Form.findById(req.params.id, function (err, form) {
         if (err) {
             return res.status(500).json({
@@ -123,7 +121,7 @@ router.patch('/:id', function (req, res, next) {
 });
 
 router.delete('/:id', function (req, res, next) {
-    var decoded = jwt.decode(req.query.token);
+    var decoded = jwt.decode(req.body.token);
     Form.findById(req.params.id, function (err, form) {
         if (err) {
             return res.status(500).json({
