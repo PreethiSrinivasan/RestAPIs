@@ -5,6 +5,30 @@
 var express = require('express');
 var router = express.Router();
 var Disaster = require('../models/disaster');
+router.get('/states/2016', function (req, res, next) {
+    Disaster.aggregate([
+      {
+        "qty":5
+      },
+        { $match: {
+            year: 2016
+        }},
+      { $group: {
+            _id: "$state", count:{$sum : 1}
+        }}])
+        .exec(function (err, result) {
+            if (err) {
+                return res.status(500).json({
+                    title: 'An error occurred',
+                    error: err
+                });
+            }
+            res.status(200).json({
+                message: 'Success',
+                obj: result
+            });
+        });
+});
 router.get('/year', function (req, res, next) {
     Disaster.aggregate({ $group: {
             _id: "$year", count:{$sum : 1}
