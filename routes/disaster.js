@@ -7,7 +7,7 @@ var router = express.Router();
 var Disaster = require('../models/disaster');
 router.get('/', function (req, res, next) {
     Disaster.aggregate({ $group: {
-            year: 'year'
+            _id: "$year", count:{$sum : 1}
         }})
         .exec(function (err, result) {
             if (err) {
