@@ -22,10 +22,73 @@ router.get('/year', function (req, res, next) {
             });
         });
 });
-router.get('/item', function (req, res, next) {
+router.get('/item/2017', function (req, res, next) {
     Disaster.aggregate([
         { $match: {
             year: 2017
+        }},
+      { $group: {
+            _id: "$item", count:{$sum : 1}
+        }}])
+        .exec(function (err, result) {
+            if (err) {
+                return res.status(500).json({
+                    title: 'An error occurred',
+                    error: err
+                });
+            }
+            res.status(200).json({
+                message: 'Success',
+                obj: result
+            });
+        });
+});
+router.get('/item/2016', function (req, res, next) {
+    Disaster.aggregate([
+        { $match: {
+            year: 2016
+        }},
+      { $group: {
+            _id: "$item", count:{$sum : 1}
+        }}])
+        .exec(function (err, result) {
+            if (err) {
+                return res.status(500).json({
+                    title: 'An error occurred',
+                    error: err
+                });
+            }
+            res.status(200).json({
+                message: 'Success',
+                obj: result
+            });
+        });
+});
+router.get('/item/2015', function (req, res, next) {
+    Disaster.aggregate([
+        { $match: {
+            year: 2015
+        }},
+      { $group: {
+            _id: "$item", count:{$sum : 1}
+        }}])
+        .exec(function (err, result) {
+            if (err) {
+                return res.status(500).json({
+                    title: 'An error occurred',
+                    error: err
+                });
+            }
+            res.status(200).json({
+                message: 'Success',
+                obj: result
+            });
+        });
+});
+router.get('/item/2014', function (req, res, next) {
+    Disaster.aggregate([
+        { $match: {
+            year: 2014
         }},
       { $group: {
             _id: "$item", count:{$sum : 1}
